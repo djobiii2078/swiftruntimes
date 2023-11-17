@@ -40,6 +40,7 @@ expand_time = 0;
 shrink_flag = 0; 
 expand_flag = 0; 
 
+fsl_list = []; 
 start_timer = 0; 
 
 def handler(signum, frame):
@@ -51,6 +52,13 @@ def handler(signum, frame):
         shrink_flag = 1;
         start_timer = timer()
         #shrink routine 
+        #Get the list of all modules 
+        modulenames = set(sys.modules) & set(globals())
+        fsl_list = [sys.modules[name] for name in modulenames] 
+
+        for lib in fsl_list:
+            print(lib," ")
+
         shrink_time = timer() - start_timer()
 
 
@@ -62,7 +70,7 @@ def handler(signum, frame):
 
 
 signal.signal(signal.SIGINT, handler)
-signal.signal(signal.SIGINT, handler)
+signal.signal(signal.SIGHUP, handler)
 
 while True:
     #Perform processing 
