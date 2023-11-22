@@ -152,6 +152,7 @@ PyAPI_FUNC(Py_ssize_t) PyGC_Collect(void);
 PyAPI_FUNC(int) PyGC_Enable(void);
 PyAPI_FUNC(int) PyGC_Disable(void);
 PyAPI_FUNC(int) PyGC_IsEnabled(void);
+PyAPI_FUNC(int) PyGC_Mark(void *); 
 
 
 #if !defined(Py_LIMITED_API)

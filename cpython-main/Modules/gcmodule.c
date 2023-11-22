@@ -1454,7 +1454,7 @@ gc_collect_with_callback(PyThreadState *tstate, int generation)
  * 
  */
 
-static Py_ssize_t 
+static PyObject * 
 gc_mark_impl(PyObject *obj)
 {
     PyObject_GC_Del(obj);
@@ -2150,32 +2150,7 @@ PyGC_Collect(void)
     return n;
 }
 
-/* Public API to invoke gc.mark() from C*/
-Py_ssize_t
-PyGC_Mark(void)
-{
-    PyThreadState *tstate = _PyThreadState_GET();
-    GCState *gcstate = &tstate->interp->gc; 
 
-    if(!gcstate->enabled){
-        return 0; 
-    }
-
-    Pyssize_t n;
-    if(gcstate->collecting){
-        /* already collecting, wait before adding killing it*/
-        n = 0;
-    }
-
-    else {
-        PyObject *exc = _PyErr_GetRaisedException(tstate);
-        n = gc_mark(tstate);
-        _PyErr_SetRaisedException(tstate, exc);
-        
-    }
-    /* 1 if successfully killed*/
-    return n; 
-}
 
 Py_ssize_t
 _PyGC_CollectNoFail(PyThreadState *tstate)
@@ -2272,6 +2247,8 @@ visit_validate(PyObject *op, void *parent_raw)
 
 /* extension modules might be compiled with GC support so these
    functions must always be available */
+
+/* Public API to invoke gc.mark() from C*/
 
 void
 PyObject_GC_Mark(void *op_raw)
