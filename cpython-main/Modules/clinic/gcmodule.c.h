@@ -352,7 +352,7 @@ PyDoc_STRVAR(gc_mark__doc__,
 "--\n"
 "\n"
 "Remove a library from the memory");
-#define GC_MARK_METHODEF            \
+#define GC_MARK_METHODDEF            \
     {"mark", (PyCFunction)gc_mark, METH_O, gc_mark__doc__},
 static PyObject *
 gc_mark_impl(PyObject *module);

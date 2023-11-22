@@ -1455,11 +1455,9 @@ gc_collect_with_callback(PyThreadState *tstate, int generation)
  */
 
 static Py_ssize_t 
-gc_mark(PyObject *module, PyObject *obj)
+gc_mark_impl(PyObject *obj)
 {
-    assert(!_PyErr_Occurred(tstate));
     PyObject_GC_Del(obj);
-    assert(!_PyErr_Occurred(tsate));
     return 0; 
 }
 
