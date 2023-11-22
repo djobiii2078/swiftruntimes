@@ -347,6 +347,22 @@ PyDoc_STRVAR(gc_is_tracked__doc__,
 #define GC_IS_TRACKED_METHODDEF    \
     {"is_tracked", (PyCFunction)gc_is_tracked, METH_O, gc_is_tracked__doc__},
 
+PyDoc_STRVAR(gc_mark__doc__,
+"mark($module, obj, /)\n"
+"--\n"
+"\n"
+"Remove a library from the memory");
+#define GC_MARK_METHODEF            \
+    {"mark", (PyCFunction)gc_mark, METH_O, gc_mark__doc__},
+static PyObject *
+gc_mark_impl(PyObject *module);
+
+static PyObject *
+gc_mark(PyObject *module, PyObject *Py_UNUSED(ignored))
+{
+    return gc_mark_impl(module);
+}
+
 PyDoc_STRVAR(gc_is_finalized__doc__,
 "is_finalized($module, obj, /)\n"
 "--\n"

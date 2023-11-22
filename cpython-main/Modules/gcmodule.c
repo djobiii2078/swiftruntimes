@@ -1448,6 +1448,21 @@ gc_collect_with_callback(PyThreadState *tstate, int generation)
     return result;
 }
 
+/**
+ * Perform garbage collection for a specific module
+ * Main entrypoint for the shrink routine
+ * 
+ */
+
+static Py_ssize_t 
+gc_mark(PyObject *module, PyObject *obj)
+{
+    assert(!_PyErr_Occurred(tstate));
+    PyObject_GC_Del(obj);
+    assert(!_PyErr_Occurred(tsate));
+    return 0; 
+}
+
 static Py_ssize_t
 gc_collect_generations(PyThreadState *tstate)
 {
@@ -1996,6 +2011,7 @@ PyDoc_STRVAR(gc__doc__,
 "disable() -- Disable automatic garbage collection.\n"
 "isenabled() -- Returns true if automatic collection is enabled.\n"
 "collect() -- Do a full collection right now.\n"
+"mark() -- directly kill a module. Used for elastic runtimes.\n"
 "get_count() -- Return the current collection counts.\n"
 "get_stats() -- Return list of dictionaries containing per-generation stats.\n"
 "set_debug() -- Set debugging flags.\n"
@@ -2021,6 +2037,7 @@ static PyMethodDef GcMethods[] = {
     {"set_threshold",  gc_set_threshold, METH_VARARGS, gc_set_thresh__doc__},
     GC_GET_THRESHOLD_METHODDEF
     GC_COLLECT_METHODDEF
+    GC_MARK_METHODDEF
     GC_GET_OBJECTS_METHODDEF
     GC_GET_STATS_METHODDEF
     GC_IS_TRACKED_METHODDEF
@@ -2135,6 +2152,33 @@ PyGC_Collect(void)
     return n;
 }
 
+/* Public API to invoke gc.mark() from C*/
+Py_ssize_t
+PyGC_Mark(void)
+{
+    PyThreadState *tstate = _PyThreadState_GET();
+    GCState *gcstate = &tstate->interp->gc; 
+
+    if(!gcstate->enabled){
+        return 0; 
+    }
+
+    Pyssize_t n;
+    if(gcstate->collecting){
+        /* already collecting, wait before adding killing it*/
+        n = 0;
+    }
+
+    else {
+        PyObject *exc = _PyErr_GetRaisedException(tstate);
+        n = gc_mark(tstate);
+        _PyErr_SetRaisedException(tstate, exc);
+        
+    }
+    /* 1 if successfully killed*/
+    return n; 
+}
+
 Py_ssize_t
 _PyGC_CollectNoFail(PyThreadState *tstate)
 {
@@ -2230,6 +2274,23 @@ visit_validate(PyObject *op, void *parent_raw)
 
 /* extension modules might be compiled with GC support so these
    functions must always be available */
+
+void
+PyObject_GC_Mark(void *op_raw)
+{
+    
+    PyObject *op = _PyObject_CAST(op_raw);
+   
+    PyObject_GC_Del(op);
+
+#ifdef Py_DEBUG
+    /* Check that the object is valid: validate objects traversed
+       by tp_traverse() */
+    traverseproc traverse = Py_TYPE(op)->tp_traverse;
+    (void)traverse(op, visit_validate, op);
+#endif
+
+}
 
 void
 PyObject_GC_Track(void *op_raw)

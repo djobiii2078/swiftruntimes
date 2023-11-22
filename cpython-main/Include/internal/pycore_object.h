@@ -291,6 +291,36 @@ _PyObject_InitVar(PyVarObject *op, PyTypeObject *typeobj, Py_ssize_t size)
     Py_SET_SIZE(op, size);
 }
 
+/* Tell the GC to track this object within gen3
+* The goal is just to append to gen3 list which is always 
+* discarded when necessary during the shrink operation
+* We just consider that we will have a double reference 
+* in the previous list and the gen3 list
+* TODO: move the object from the current list to gen3
+*/
+static inline void _PyObject_GC_MARK(
+// The preprocessor removes _PyObject_ASSERT_FROM() calls if NDEBUG is defined
+#ifndef NDEBUG
+    const char *filename, int lineno,
+#endif
+    PyObject *op)
+{
+    
+    PyGC_Head *gc = _Py_AS_GC(op);
+    _PyObject_ASSERT_FROM(op,
+                          (gc->_gc_prev & _PyGC_PREV_MASK_COLLECTING) == 0,
+                          "object is in generation which is garbage collected",
+                          filename, lineno, __func__);
+
+    PyInterpreterState *interp = _PyInterpreterState_GET();
+    PyGC_Head *generation3 = interp->gc.generation3;
+    PyGC_Head *last = (PyGC_Head*)(generation3->_gc_prev);
+    _PyGCHead_SET_NEXT(last, gc);
+    _PyGCHead_SET_PREV(gc, last);
+    _PyGCHead_SET_NEXT(gc, generation3);
+    generation3->_gc_prev = (uintptr_t)gc;
+}
+
 
 /* Tell the GC to track this object.
  *
@@ -367,10 +397,14 @@ static inline void _PyObject_GC_UNTRACK(
 #ifdef NDEBUG
 #  define _PyObject_GC_TRACK(op) \
         _PyObject_GC_TRACK(_PyObject_CAST(op))
+#   define _PyObject_GC_MARK(op) \
+        _PyObject_GC_MARK(_PyObject_CAST(op))
 #  define _PyObject_GC_UNTRACK(op) \
         _PyObject_GC_UNTRACK(_PyObject_CAST(op))
 #else
 #  define _PyObject_GC_TRACK(op) \
+        _PyObject_GC_TRACK(__FILE__, __LINE__, _PyObject_CAST(op))
+#  define _PyObject_GC_MARK(op) \
         _PyObject_GC_TRACK(__FILE__, __LINE__, _PyObject_CAST(op))
 #  define _PyObject_GC_UNTRACK(op) \
         _PyObject_GC_UNTRACK(__FILE__, __LINE__, _PyObject_CAST(op))
