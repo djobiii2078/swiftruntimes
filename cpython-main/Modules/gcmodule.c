@@ -2255,7 +2255,10 @@ PyObject_GC_Mark(void *op_raw)
 {
     
     PyObject *op = _PyObject_CAST(op_raw);
-   
+    if (_PyObject_GC_IS_TRACKED(op)) {
+        PyObject_GC_UnTrack(op);
+    }
+
     PyObject_GC_Del(op);
 
 #ifdef Py_DEBUG
