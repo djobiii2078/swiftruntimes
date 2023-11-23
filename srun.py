@@ -77,6 +77,7 @@ class erun_faas:
 		self.run_func = 0
 
 		self.fsl_list = []
+                self.fsl_addresses = []
 		 
 
 	#signal handler for 
@@ -100,8 +101,13 @@ class erun_faas:
 				if(lib not in self.psl): 
 					#it belong to the fsl
 					print("deleting fsl ", lib, ", sys.modules = ", sys.modules[lib], "\n")
+                                        #get the addresses of the variable names
+                                        #that point to the librairies that would be removed 
+                                        #will be useful for RDMA/zero-copy web 
+
+                                        self.fsl_addresses.append(hex(id(lib)))
 					self.fsl_list.append(lib)
-					del sys.modules[lib] 
+					gc.mark(sys.modules[lib]) 
 		gc.collect()
 		self.shrink_time = timer() - start_timer
 
