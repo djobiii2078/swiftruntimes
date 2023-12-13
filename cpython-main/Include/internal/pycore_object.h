@@ -397,14 +397,10 @@ static inline void _PyObject_GC_UNTRACK(
 #ifdef NDEBUG
 #  define _PyObject_GC_TRACK(op) \
         _PyObject_GC_TRACK(_PyObject_CAST(op))
-#   define _PyObject_GC_MARK(op) \
-        _PyObject_GC_MARK(_PyObject_CAST(op))
 #  define _PyObject_GC_UNTRACK(op) \
         _PyObject_GC_UNTRACK(_PyObject_CAST(op))
 #else
 #  define _PyObject_GC_TRACK(op) \
-        _PyObject_GC_TRACK(__FILE__, __LINE__, _PyObject_CAST(op))
-#  define _PyObject_GC_MARK(op) \
         _PyObject_GC_TRACK(__FILE__, __LINE__, _PyObject_CAST(op))
 #  define _PyObject_GC_UNTRACK(op) \
         _PyObject_GC_UNTRACK(__FILE__, __LINE__, _PyObject_CAST(op))
