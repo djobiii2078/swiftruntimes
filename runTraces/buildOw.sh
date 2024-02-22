@@ -6,8 +6,11 @@
 
 #check if java 1.8 or 11 or < 17 is present on the server 
 #Need Go installed
+sudo apt install openjdk-11-jre-headless
+sudo apt install golang-go
 # install wsk openwhisk tool if not present 
 git clone https://github.com/apache/openwhisk-cli
+cd openwhisk-cli 
 go build -o wsk 
 
 echo 'export PATH=$PATH:$(pwd)/wsk' >> ~/.bashrc 
