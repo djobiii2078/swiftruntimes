@@ -1,0 +1,7 @@
+./genPlot.sh 94dcb15ab899 128 6 run_19167/res.txt imgs3 50 >> plot_processing-imgs3.pdf
+/genPlot.sh video_processing_local 512 8 run_21785/res.txt vlocal 100 >> plot_video_processing_local-vlocal.pdf 
+./genPlot.sh video_processing_local 256 8 run_21785/res.txt vlocal 400 >> plot_video_processing_local-vlocal.pdf
+./genPlot.sh local 256 8 run_21491/res.txt resizeLocal 2000 >> plot_local-resizeLocal.pdf
+./genPlot.sh e180d4430c4a 128 8 run_19167/res.txt resizeLocal 500 >> plot_e180d4430c4a-resizeLocal.pdf   
+./genPlot.sh video 256 8 run_19167/res.txt resizeLocal 300 >> plot_video-resizeLocal.pdf  
+/genPlot.sh local 256 8 run_10892/res.txt 10892 2000 
