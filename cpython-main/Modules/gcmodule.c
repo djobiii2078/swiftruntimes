@@ -2291,7 +2291,7 @@ PyObject_GC_Track(void *op_raw)
 
 void
 PyObject_GC_UnTrack(void *op_raw)
-{
+{  
     PyObject *op = _PyObject_CAST(op_raw);
     /* 
      * Obscure:  the Py_TRASHCAN mechanism requires that we be able to
