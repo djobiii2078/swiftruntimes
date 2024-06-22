@@ -57,6 +57,39 @@ class erun_faas:
 		"netifaces",
 		"timeit", #for time measurements 
 		"setuptools",
+        #built-in python modules necessary for the runtime at initialization (Modules/config.c --- from CPython source code) 
+        "atexit",
+        "faulthandler",
+        "posix",
+        "_signal",
+        "_tracemalloc",
+        "_codecs",
+        "_collections",
+        "errno",
+        "_io",
+        "itertools",
+        "_sre",
+        "_sysconfig",
+        "_thread",
+        "time",
+        "_typing",
+        "_weakref",
+        "_abc",
+        "_functools",
+        "_locale",
+        "_operator",
+        "_stat",
+        "_symtable",
+        "pwd",
+        "marshal",
+        "_imp",
+        "_ast",
+        "_tokenize",
+        "sys",
+        "builtins",
+        "gc",
+        "_warnings",
+        "_string",
 		######### system base libraries ############
 		## should be changed to consider specific runtimes 
 		"sys", "builtins", "_frozen_importlib", "_imp", "_thread", "_warnings", "_weakref", "_io", "marshal", "posix", "_frozen_importlib_external", "time", "zipimport", "_codecs", "codecs", "encodings.aliases", "encodings", "encodings.utf_8", "_signal", "_abc", "abc", "io", "__main__", "_stat", "stat", "_collections_abc", "genericpath", "posixpath", "_sitebuiltins", "types", "importlib._bootstrap", "importlib._bootstrap_external", "warnings", "importlib", "importlib._abc", "itertools", "keyword", "_operator", "operator", "reprlib", "_collections", "collections", "_functools", "functools", "contextlib", "importlib.util", "importlib.machinery", "mpl_toolkits", "paste", "_distutils_hack", "site", "enum", "signal", "gc", "timeit", "_sre", "re._constants", "re._parser", "re._casefix", "re._compiler", "copyreg", "re", "platform", "atexit", "collections.abc", "token", "tokenize", "linecache", "textwrap", "traceback", "_weakrefset", "weakref", "_string", "string", "threading", "logging", "math", "_struct", "struct", "fnmatch", "errno", "zlib", "_compression", "_bz2", "bz2", "_lzma", "lzma", "_bisect", "bisect", "_random", "_sha512", "random", "tempfile", "ntpath", "urllib", "ipaddress", "urllib.parse", "pathlib", "__future__", "xml", "xml.parsers", "pyexpat.errors", "pyexpat.model", "pyexpat", "xml.parsers.expat.model", "xml.parsers.expat.errors", "xml.parsers.expat", "defusedxml.common", "defusedxml", "xml.etree", "xml.etree.ElementPath", "copy", "_elementtree", "xml.etree.ElementTree", "defusedxml.ElementTree", "cffi.lock", "cffi.error", "cffi.model", "cffi.api", "cffi"
@@ -77,7 +110,7 @@ class erun_faas:
 		self.run_func = 0
 
 		self.fsl_list = []
-                self.fsl_addresses = []
+		self.fsl_addresses = []
 		 
 
 	#signal handler for 
@@ -96,7 +129,7 @@ class erun_faas:
 			
 			#del sys.modules["shutil"]
 			#del sys.modules["uuid"]
-			print(dir())
+			#print(dir())
 			for lib in list(sys.modules.keys()):
 				if(lib not in self.psl): 
 					#it belong to the fsl
@@ -105,9 +138,13 @@ class erun_faas:
                                         #that point to the librairies that would be removed 
                                         #will be useful for RDMA/zero-copy web 
 
-                                        self.fsl_addresses.append(hex(id(lib)))
+			#		boto3 = ""
+					self.fsl_addresses.append(hex(id(lib)))
 					self.fsl_list.append(lib)
-					gc.mark(sys.modules[lib]) 
+					
+					#gc.mark(sys.modules[lib]) 
+					del sys.modules[lib]
+		#boto3 = ""
 		gc.collect()
 		self.shrink_time = timer() - start_timer
 
