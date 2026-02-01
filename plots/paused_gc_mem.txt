@@ -1,7 +1,0 @@
-videoS3	5.8	275	120	92
-videoLocal	5.8	150	48	40
-imgS3	5.8	270	128	93
-imgLocal	5.8	80	47	40
-thumbnailer	5.8	83	48	39
-pagerank	5.8	70	69	65
-analytics	5.8	62	54	49	
