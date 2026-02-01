@@ -142,7 +142,7 @@ class erun_faas:
 					self.fsl_addresses.append(hex(id(lib)))
 					self.fsl_list.append(lib)
 					
-					#gc.mark(sys.modules[lib]) 
+					gc.mark(sys.modules[lib]) 
 					del sys.modules[lib]
 		#boto3 = ""
 		gc.collect()
