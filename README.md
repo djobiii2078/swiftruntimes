@@ -18,6 +18,7 @@ Please check out the paper if interested in the entire design: [https://inria.ha
 
 ### Build the gc expand/script of the custom cpython
 
+`cd cpython-main`
 `./configure --prefix=/tmp/python --with-pydebug --with-ensurepip=install`
 `make` 
 
