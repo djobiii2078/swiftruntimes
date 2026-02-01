@@ -2,7 +2,23 @@
 The goal of an ERUN is to shrink and rapidly expand its memory usage corresponding to the specific events.
 In FaaS, we use it to reduce memory usage when idle and to rapidly reload required libraries when resuming function execution. 
 
-Please check out the paper if interested in the entire design: [https://inria.hal.science/hal-05465369v1](details) accepted at the 24th International Conference on Pervasive Computing and Communications (PerCom 2026). 
+Please check out the paper if interested in the entire design: [https://inria.hal.science/hal-05465369v1](details) accepted at the 24th International Conference on Pervasive Computing and Communications (PerCom 2026). Cite the paper: 
+
+@inproceedings{mvondo:hal-05465369,
+  TITLE = {{Efficient Memory Usage For Edge FaaS Platforms}},
+  AUTHOR = {Mvondo, Djob and Djomgwe Teabe, Boris and Parlavantzas, Nikos},
+  URL = {https://inria.hal.science/hal-05465369},
+  BOOKTITLE = {{PerCom 2026 - 24th IEEE International Conference on Pervasive Computing and Communications}},
+  ADDRESS = {Pise, Italy},
+  ORGANIZATION = {{IEEE}},
+  YEAR = {2026},
+  MONTH = Mar,
+  KEYWORDS = {Edge computing ; Sustainable computing ; Runtime ; Memory ; FaaS},
+  PDF = {https://inria.hal.science/hal-05465369v1/file/Memory_saving_EdgeFaaS___Keep_Alive%20%2811%29.pdf},
+  HAL_ID = {hal-05465369},
+  HAL_VERSION = {v1},
+}
+
 ## Commands for building eRUN
 
 *dependecies from [https://devguide.python.org/getting-started/setup-building/#build-dependencies](link)*
