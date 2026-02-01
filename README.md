@@ -3,7 +3,8 @@ The goal of an ERUN is to shrink and rapidly expand its memory usage correspondi
 In FaaS, we use it to reduce memory usage when idle and to rapidly reload required libraries when resuming function execution. 
 
 Please check out the paper if interested in the entire design: [https://inria.hal.science/hal-05465369v1](details) accepted at the 24th International Conference on Pervasive Computing and Communications (PerCom 2026). Cite the paper: 
-
+- [{Efficient Memory Usage For Edge FaaS Platforms}](https://inria.hal.science/hal-05465369), Mvondo, Djob et al., {PerCom 2026 - 24th IEEE International Conference on Pervasive Computing and Communications}, undefined 2026
+- 
 @inproceedings{mvondo:hal-05465369,
   TITLE = {{Efficient Memory Usage For Edge FaaS Platforms}},
   AUTHOR = {Mvondo, Djob and Djomgwe Teabe, Boris and Parlavantzas, Nikos},
