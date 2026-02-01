@@ -35,6 +35,12 @@ time.sleep(0.5)
 gc.collect()
 ```
 
+## Rerun FaaS traces on openwhisk
+
+In the `runTraces` folder, the script `buildOw.sh` allows you to build a standalone Lean OpenWhisk version. 
+To run a specific trace (Azure/Alibaba), use the `launchFunc.sh` and update the trace folder repository. 
+It leverages a monitoring script to get memory usage and execution time results (`logDockerStats.sh`) and a plot helper `genPlot.sh`. 
+
 ## Contact 
 
 Djob Mvondo ( djobiii2078@gmail / bmvondod@irisa.fr)
