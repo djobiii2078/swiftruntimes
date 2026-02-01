@@ -37,4 +37,4 @@ gc.collect()
 
 ## Contact 
 
-Djob Mvondo (djobiii2078@gmail / bmvondod@irisa.fr)
+Djob Mvondo ( djobiii2078@gmail / bmvondod@irisa.fr)
